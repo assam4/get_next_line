@@ -5,6 +5,11 @@
 #  define BUFFER_SIZE 42
 # endif
 
+# if BUFFER_SIZE < 1
+#  undef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
+
 # include <unistd.h>
 # include <stdlib.h>
 
