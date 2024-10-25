@@ -38,6 +38,8 @@ static int	push_to_buf(int fd, char **buffer)
 		temp = *buffer;
 		*buffer = ft_strjoin(temp, mini_buf);
 		free(temp);
+		free(mini_buf);
+		mini_buf = NULL;
 	}
 	return (count);
 }
