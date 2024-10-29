@@ -55,7 +55,7 @@ size_t	outline_len(char **endline, char **buffer, size_t index)
 		return (*endline - *buffer + 1);
 }
 
-static char	*buffer_pop(char **buffer, size_t *index ,size_t *size)
+static char	*buffer_pop(char **buffer, size_t *index, size_t *size)
 {
 	char	*outline;
 	char	*endline;
