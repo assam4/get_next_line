@@ -1,4 +1,5 @@
 #include "get_next_line.h"
+#include <stdint.h>
 
 static void	resize_capacity(char **buffer, size_t *capacity)
 {
@@ -38,14 +39,14 @@ static int	push(int fd, char **buffer, size_t *capacity, size_t *readed)
 		read_bit = read(fd, *buffer + *readed, BUFFER_SIZE);
 		if (read_bit <= 0)
 			break ;
-		*readed += read_bit;
+		*readed += read_bit;;
 	}
 	return (read_bit);
 }
 
 static size_t	length(char **endline, char **buffer)
 {
-	if (!endline)
+	if (!*endline)
 		return (ft_strlen(*buffer));
 	else
 		return (*endline - *buffer + 1);
@@ -67,7 +68,7 @@ static char	*pop(char **buffer, size_t *capacity, size_t *readed)
 		ft_strlcpy(outline, *buffer, linelen + 1);
 		*readed -= linelen;
 		if (endline)
-			ft_strlcpy(*buffer, endline + 1, *capacity);
+			ft_strlcpy(*buffer, endline + 1, *readed);
 		else
 			ft_memset(*buffer, 0, *capacity);
 	}
