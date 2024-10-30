@@ -1,5 +1,4 @@
 #include "get_next_line.h"
-#include <stdint.h>
 
 static void	resize_capacity(char **buffer, size_t *capacity)
 {
@@ -52,7 +51,7 @@ static size_t	length(char **endline, char **buffer)
 		return (*endline - *buffer + 1);
 }
 
-static char	*pop(char **buffer, size_t *capacity, size_t *readed)
+static char	*pop(char **buffer, size_t *readed)
 {
 	char	*outline;
 	char	*endline;
@@ -70,7 +69,7 @@ static char	*pop(char **buffer, size_t *capacity, size_t *readed)
 		if (endline)
 			ft_strlcpy(*buffer, endline + 1, *readed);
 		else
-			ft_memset(*buffer, 0, *capacity);
+			ft_memset(*buffer, 0, linelen);
 	}
 	return (outline);
 }
@@ -97,7 +96,7 @@ char	*get_next_line(int fd)
 		capacity = 0;
 		return (NULL);
 	}
-	outline = pop(&buffer, &capacity, &readed_count);
+	outline = pop(&buffer, &readed_count);
 	if (!outline)
 	{
 		free(buffer);
