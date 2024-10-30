@@ -1,50 +1,49 @@
 #include "get_next_line.h"
 
-static void	buffer_resize(char **buffer, size_t *size)
+static void	resize_capacity(char **buffer, size_t *capacity)
 {
-	char	*temp;
+	char	*temp_ptr;
 
 	if (!*buffer)
 	{
 		*buffer = (char *)ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-		if (!*buffer)
-			return ;
-		*size = BUFFER_SIZE + 1;
+		if (*buffer)
+			*capacity = BUFFER_SIZE + 1;
 	}
 	else
 	{
-		temp = *buffer;
-		*buffer = (char *)ft_calloc(*size * 2, sizeof(char));
+		temp_ptr = *buffer;
+		*buffer = (char *)ft_calloc(*capacity * 2 - 1, sizeof(char));
 		if (!*buffer)
-			*size = 0;
+			*capacity = 0;
 		else
 		{
-			ft_strlcpy(*buffer, temp, *size);
-			*size = *size * 2;
+			ft_strlcpy(*buffer, temp_ptr, *capacity);
+			*capacity = *capacity * 2 - 1;
 		}
-		free(temp);
+		free(temp_ptr);
 	}
 }
 
-static int	buffer_push(int fd, char **buffer, size_t *size, size_t *index)
+static int	push(int fd, char **buffer, size_t *capacity, size_t *readed)
 {
 	int	read_bit;
 
 	while (!ft_strchr(*buffer, NEWLINE))
 	{
-		if (!(*size) || (*size - 1) < (*index + BUFFER_SIZE))
-			buffer_resize(buffer, size);
+		if (*capacity <= *readed + BUFFER_SIZE)
+			resize_capacity(buffer, capacity);
 		if (!*buffer)
-			return (-99);
-		read_bit = read(fd, *buffer + *index, BUFFER_SIZE);
+			return (-42);
+		read_bit = read(fd, *buffer + *readed, BUFFER_SIZE);
 		if (read_bit <= 0)
 			break ;
-		*index += read_bit;
+		*readed += read_bit;
 	}
 	return (read_bit);
 }
 
-size_t	outline_len(char **endline, char **buffer)
+static size_t	length(char **endline, char **buffer)
 {
 	if (!endline)
 		return (ft_strlen(*buffer));
@@ -52,53 +51,56 @@ size_t	outline_len(char **endline, char **buffer)
 		return (*endline - *buffer + 1);
 }
 
-static char	*buffer_pop(char **buffer, size_t *index, size_t *size)
+static char	*pop(char **buffer, size_t *capacity, size_t *readed)
 {
 	char	*outline;
 	char	*endline;
-	size_t	out_len;
+	size_t	linelen;
 
 	if (!*buffer || !**buffer)
 		return (NULL);
 	endline = ft_strchr(*buffer, NEWLINE);
-	out_len = outline_len(&endline, buffer);
-	outline = (char *)ft_calloc(out_len + 1, sizeof(char));
+	linelen = length(&endline, buffer);
+	outline = (char *)ft_calloc(linelen + 1, sizeof(char));
 	if (outline)
 	{
-		ft_strlcpy(outline, *buffer, out_len + 1);
-		*index -= out_len;
-		if (out_len != ft_strlen(*buffer))
-			ft_strlcpy(*buffer, endline + 1, *size);
+		ft_strlcpy(outline, *buffer, linelen + 1);
+		*readed -= linelen;
+		if (endline)
+			ft_strlcpy(*buffer, endline + 1, *capacity);
 		else
-			ft_memset(*buffer, 0, *size);
+			ft_memset(*buffer, 0, *capacity);
 	}
 	return (outline);
 }
 
 char	*get_next_line(int fd)
 {
-	static char		*fd_buffer = NULL;
-	static size_t	bf_index = 0;
-	static size_t	bf_size = 0;
-	char			*out_line;
-	int				rd_bit;
+	static char		*buffer = NULL;
+	static size_t	capacity = 0;
+	static size_t	readed_count = 0;
+	char			*outline;
+	int				read_bit;
 
-	if (fd < 0)
+	if (fd != 0 && fd < 2)
 		return (NULL);
-	rd_bit = buffer_push(fd, &fd_buffer, &bf_size, &bf_index);
-	if (rd_bit < 0)
+	read_bit = push(fd, &buffer, &capacity, &readed_count);
+	if (read_bit < 0)
 	{
-		if (fd_buffer)
-			free(fd_buffer);
-		bf_index = 0;
-		bf_size = 0;
+		if (buffer)
+		{
+			free(buffer);
+			buffer = NULL;
+		}
+		readed_count = 0;
+		capacity = 0;
 		return (NULL);
 	}
-	out_line = buffer_pop(&fd_buffer, &bf_index, &bf_size);
-	if (!out_line)
+	outline = pop(&buffer, &capacity, &readed_count);
+	if (!outline)
 	{
-		free(fd_buffer);
-		fd_buffer = NULL;
+		free(buffer);
+		buffer = NULL;
 	}
-	return (out_line);
+	return (outline);
 }

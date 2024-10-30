@@ -1,4 +1,1 @@
-Hello, World!
-This is a test file.
-It has multiple lines.
-Good luck!
+This is a test file without newline characters. It contains only one long string of text that will be read by your program during testing.
