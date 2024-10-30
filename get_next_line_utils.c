@@ -24,7 +24,8 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t n)
 		dest[i] = src[i];
 		++i;
 	}
-	dest[i] = '\0';
+	while (i < n)
+	dest[i++] = '\0';
 	return (src_len);
 }
 
@@ -34,6 +35,8 @@ char	*ft_strchr(const char *s, int c)
 	char	letter;
 
 	letter = (char)c;
+	if (!s)
+		return (NULL);
 	s_len = ft_strlen(s) + 1;
 	while (s_len--)
 	{
@@ -60,10 +63,12 @@ void	*ft_calloc(size_t num, size_t size)
 	void	*ptr;
 
 	total = num * size;
+	if (!total)
+		return (NULL);
 	if (num && total / num != size)
 		return (NULL);
 	ptr = malloc(total);
 	if (ptr)
-		return (ft_memset(ptr, num, size));
+		return (ft_memset(ptr, 0, total));
 	return (NULL);
 }
