@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
 
     char *line;
     while ((line = get_next_line(fd)) != NULL) {
-        printf("Line: %s", line);
+        printf("MAIN Line: %s\n", line);
         free(line);
     }
 
