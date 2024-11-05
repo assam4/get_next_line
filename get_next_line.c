@@ -1,4 +1,5 @@
 #include "get_next_line.h"
+#include <stdio.h>
 
 static void	resize_capacity(char **buffer, size_t *capacity)
 {
@@ -23,7 +24,7 @@ static void	resize_capacity(char **buffer, size_t *capacity)
 		*buffer = (char *)ft_calloc(*capacity, sizeof(char));
 		if (*buffer && temp_ptr)
 		{
-			ft_strlcpy(*buffer, temp_ptr, *capacity / 2);
+			ft_strlcpy(*buffer, temp_ptr, *capacity);
 			free(temp_ptr);
 		}
 	}
@@ -43,6 +44,7 @@ static int	push(int fd, char **buffer, size_t *capacity, size_t *readed)
 		if (read_bit <= 0)
 			break ;
 		*readed += read_bit;
+		printf("Buffer readed count: %zu , Buffer view : %s\n",ft_strlen(*buffer), *buffer);
 	}
 	return (read_bit);
 }
@@ -91,7 +93,7 @@ char	*get_next_line(int fd)
 	read_bit = push(fd, &buffer, &capacity, &readed_count);
 	if (read_bit >= 0)
 		outline = pop(&buffer, &readed_count);
-	if (read_bit < 0 || !outline)
+	if (read_bit < 0 || !readed_count)
 	{
 		if (buffer)
 		{
@@ -100,7 +102,8 @@ char	*get_next_line(int fd)
 		}
 		readed_count = 0;
 		capacity = 0;
-		return (NULL);
+		if (read_bit < 0)
+			return (NULL);
 	}
 	return (outline);
 }

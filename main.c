@@ -2,25 +2,22 @@
 #include <fcntl.h>
 #include "get_next_line.h"  // Убедись, что у тебя есть этот заголовочный файл
 
-int main(int argc, char **argv)
-{
-    int fd;
-    char *line;
+int main(int argc, char **argv) {
+    if (argc < 2) {
+        printf("Usage: %s <filename>\n", argv[0]);
+        return 1;
+    }
 
-    if (argc < 2)
-	    fd = open("test.txt", O_RDONLY);
-    else
-	    fd = open(argv[1], O_RDONLY);
-    if (fd < 0)
-    {
+    int fd = open(argv[1], O_RDONLY);
+    if (fd == -1) {
         perror("Error opening file");
         return 1;
     }
 
-    while ((line = get_next_line(fd)) != NULL)
-    {
-        printf("%s", line);
-        free(line);  // Не забудь освобождать память
+    char *line;
+    while ((line = get_next_line(fd)) != NULL) {
+        printf("Line: %s", line);
+        free(line);
     }
 
     close(fd);
