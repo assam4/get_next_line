@@ -58,7 +58,7 @@ static size_t	length(char **endline, char **buffer, size_t readed)
 	else
 	{
 		len = *endline - *buffer + 1;
-		if(len > readed)
+		if (len > readed)
 			len = readed;
 	}
 	return (len);
