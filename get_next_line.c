@@ -49,12 +49,19 @@ static int	push(int fd, char **buffer, size_t *capacity, size_t *readed)
 	return (read_bit);
 }
 
-static size_t	length(char **endline, char **buffer)
+static size_t	length(char **endline, char **buffer, size_t readed)
 {
+	size_t	len;
+
 	if (!*endline)
-		return (ft_strlen(*buffer));
+		len = ft_strlen(*buffer);
 	else
-		return (*endline - *buffer + 1);
+	{
+		len = *endline - *buffer + 1;
+		if(len > readed)
+			len = readed;
+	}
+	return (len);
 }
 
 static char	*pop(char **buffer, size_t *readed)
@@ -66,7 +73,7 @@ static char	*pop(char **buffer, size_t *readed)
 	if (!*buffer || !**buffer)
 		return (NULL);
 	endline = ft_strchr(*buffer, NEWLINE);
-	linelen = length(&endline, buffer);
+	linelen = length(&endline, buffer, *readed);
 	outline = (char *)ft_calloc(linelen + 1, sizeof(char));
 	if (outline)
 	{
