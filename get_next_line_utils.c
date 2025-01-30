@@ -6,7 +6,7 @@
 /*   By: saslanya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 01:49:46 by saslanya          #+#    #+#             */
-/*   Updated: 2025/01/25 01:49:49 by saslanya         ###   ########.fr       */
+/*   Updated: 2025/01/30 23:18:13 by saslanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,9 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t n)
 
 char	*ft_strchr(const char *s, int c)
 {
-	size_t	s_len;
-	char	letter;
-
-	letter = (char)c;
-	if (!s)
-		return (NULL);
-	s_len = ft_strlen(s) + 1;
-	while (s_len--)
+	while (s && *s)
 	{
-		if (*s == letter)
+		if (*s == c)
 			return ((char *)s);
 		++s;
 	}
