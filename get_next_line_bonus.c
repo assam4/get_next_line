@@ -6,11 +6,11 @@
 /*   By: saslanya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 01:49:36 by saslanya          #+#    #+#             */
-/*   Updated: 2025/01/25 01:51:25 by saslanya         ###   ########.fr       */
+/*   Updated: 2025/01/30 19:12:05 by saslanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static void	resize_capacity(char **buffer, size_t *capacity)
 {
@@ -60,45 +60,6 @@ static int	push(int fd, char **buffer, size_t *capacity, size_t *readed)
 	}
 	return (read_bit);
 }
-/*
-static size_t	length(char **endline, char **buffer, size_t readed)
-{
-	size_t	len;
-
-	if (!*endline)
-		len = ft_strlen(*buffer);
-	else
-	{
-		len = *endline - *buffer + 1;
-		if (len > readed)
-			len = readed;
-	}
-	return (len);
-}
-
-static char	*pop(char **buffer, size_t *readed)
-{
-	char	*outline;
-	char	*endline;
-	size_t	linelen;
-
-	if (!*buffer || !**buffer)
-		return (NULL);
-	endline = ft_strchr(*buffer, NEWLINE);
-	linelen = length(&endline, buffer, *readed);
-	outline = (char *)ft_calloc(linelen + 1, sizeof(char));
-	if (outline)
-	{
-		ft_strlcpy(outline, *buffer, linelen + 1);
-		*readed -= linelen;
-		if (endline)
-			ft_strlcpy(*buffer, endline + 1, *readed + 1);
-		else
-			ft_memset(*buffer, 0, linelen);
-	}
-	return (outline);
-}
-*/
 
 static char	*pop(char **buffer, size_t *readed)
 {
@@ -149,23 +110,23 @@ void	arg_free(void **buffer, void **capacity, void **readed_count)
 
 char	*get_next_line(int fd)
 {
-	static void		*data[3] = {NULL};
+	static void		*data[FOPEN_MAX][3] = {{NULL, NULL, NULL}};
 	char			*outline;
 	int				read_bit;
 
-	if ((fd != 0 && fd < 2) || fd > 65535) // 2^16
+	if ((fd != 0 && fd < 2) || fd > FOPEN_MAX) // 2^16
 		return (NULL);
-	if (!data[1])
-		data[1] = ft_calloc(1, sizeof(size_t));
-	if (!data[2])
-		data[2] = ft_calloc(1, sizeof(size_t));
-	read_bit = push(fd, (char **)&data[0],
-			(size_t *)data[1], (size_t *)data[2]);
+	if (!(data[fd][1]))
+		(data[fd][1]) = ft_calloc(1, sizeof(size_t));
+	if (!data[fd][2])
+		(data[fd][2]) = ft_calloc(1, sizeof(size_t));
+	read_bit = push(fd, (char **)&(data[fd][0]),
+			(size_t *)data[fd][1], (size_t *)(data[fd][2]));
 	if (read_bit >= 0)
-		outline = pop((char **)&data[0], (size_t *)data[2]);
-	if (read_bit < 0 || !*((size_t *)data[2]))
+		outline = pop((char **)&(data[fd][0]), (size_t *)(data[fd][2]));
+	if (read_bit < 0 || !*((size_t *)(data[fd][2])))
 	{
-		arg_free(&data[0], &data[1], &data[2]);
+		arg_free(&(data[fd][0]), &(data[fd][1]), &(data[fd][2]));
 		if (read_bit < 0)
 			return (NULL);
 	}
