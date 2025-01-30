@@ -6,7 +6,7 @@
 /*   By: saslanya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 01:49:36 by saslanya          #+#    #+#             */
-/*   Updated: 2025/01/31 01:11:46 by saslanya         ###   ########.fr       */
+/*   Updated: 2025/01/31 01:14:45 by saslanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void	arg_free(void **buffer, void **capacity, void **readed_count)
 
 char	*get_next_line(int fd)
 {
-	static void		*data[FOPEN_MAX][3] = {{NULL, NULL, NULL}};
+	static void		*data[FOPEN_MAX + 1][3] = {{NULL, NULL, NULL}};
 	char			*outline;
 	int				read_bit;
 
