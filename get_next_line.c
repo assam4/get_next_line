@@ -6,7 +6,7 @@
 /*   By: saslanya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 01:49:36 by saslanya          #+#    #+#             */
-/*   Updated: 2025/01/25 01:51:25 by saslanya         ###   ########.fr       */
+/*   Updated: 2025/01/30 19:28:23 by saslanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ char	*get_next_line(int fd)
 	char			*outline;
 	int				read_bit;
 
-	if ((fd != 0 && fd < 2) || fd > 65535) // 2^16
+	if ((fd != 0 && fd < 2) || fd > FOPEN_MAX)
 		return (NULL);
 	if (!data[1])
 		data[1] = ft_calloc(1, sizeof(size_t));

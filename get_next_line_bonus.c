@@ -6,7 +6,7 @@
 /*   By: saslanya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 01:49:36 by saslanya          #+#    #+#             */
-/*   Updated: 2025/01/30 19:12:05 by saslanya         ###   ########.fr       */
+/*   Updated: 2025/01/30 19:34:17 by saslanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,19 +114,19 @@ char	*get_next_line(int fd)
 	char			*outline;
 	int				read_bit;
 
-	if ((fd != 0 && fd < 2) || fd > FOPEN_MAX) // 2^16
+	if ((fd != 0 && fd < 2) || fd > FOPEN_MAX)
 		return (NULL);
-	if (!(data[fd][1]))
-		(data[fd][1]) = ft_calloc(1, sizeof(size_t));
+	if (!data[fd][1])
+		data[fd][1] = ft_calloc(1, sizeof(size_t));
 	if (!data[fd][2])
-		(data[fd][2]) = ft_calloc(1, sizeof(size_t));
-	read_bit = push(fd, (char **)&(data[fd][0]),
-			(size_t *)data[fd][1], (size_t *)(data[fd][2]));
+		data[fd][2] = ft_calloc(1, sizeof(size_t));
+	read_bit = push(fd, (char **)&data[fd][0],
+			(size_t *)data[fd][1], (size_t *)data[fd][2]);
 	if (read_bit >= 0)
-		outline = pop((char **)&(data[fd][0]), (size_t *)(data[fd][2]));
-	if (read_bit < 0 || !*((size_t *)(data[fd][2])))
+		outline = pop((char **)&data[fd][0], (size_t *)data[fd][2]);
+	if (read_bit < 0 || !*(size_t *)data[fd][2])
 	{
-		arg_free(&(data[fd][0]), &(data[fd][1]), &(data[fd][2]));
+		arg_free(&data[fd][0], &data[fd][1], &data[fd][2]);
 		if (read_bit < 0)
 			return (NULL);
 	}

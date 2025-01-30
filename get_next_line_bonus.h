@@ -6,21 +6,21 @@
 /*   By: saslanya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 01:49:55 by saslanya          #+#    #+#             */
-/*   Updated: 2025/01/30 18:42:20 by saslanya         ###   ########.fr       */
+/*   Updated: 2025/01/30 19:29:37 by saslanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
 # endif
-
+/*
 # if BUFFER_SIZE < 1
 #  error "BUFFER_SIZE must be greater than 0"
 # endif
-
+*/
 # ifndef NEWLINE
 #  define NEWLINE '\n'
 # endif
