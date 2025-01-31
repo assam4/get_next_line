@@ -6,7 +6,7 @@
 /*   By: saslanya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 01:49:36 by saslanya          #+#    #+#             */
-/*   Updated: 2025/01/31 14:24:42 by saslanya         ###   ########.fr       */
+/*   Updated: 2025/01/31 15:17:50 by saslanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,9 @@ static void	resize_capacity(char **buffer, size_t *capacity)
 		}
 		*buffer = (char *)ft_calloc(*capacity, sizeof(char));
 		if (*buffer && temp_ptr)
-		{
 			ft_strlcpy(*buffer, temp_ptr, *capacity);
+		if (temp_ptr)
 			free(temp_ptr);
-		}
 	}
 }
 
