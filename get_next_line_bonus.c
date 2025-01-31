@@ -6,7 +6,7 @@
 /*   By: saslanya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 01:49:36 by saslanya          #+#    #+#             */
-/*   Updated: 2025/01/31 01:14:45 by saslanya         ###   ########.fr       */
+/*   Updated: 2025/01/31 14:07:45 by saslanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static char	*pop(char **buffer, size_t capacity, size_t *readed)
 	return (outline);
 }
 
-void	arg_free(void **buffer, void **capacity, void **readed_count)
+static void	*arg_free(void **buffer, void **capacity, void **readed_count)
 {
 	if (*buffer)
 	{
@@ -103,6 +103,7 @@ void	arg_free(void **buffer, void **capacity, void **readed_count)
 		free(*readed_count);
 		*readed_count = NULL;
 	}
+	return (NULL);
 }
 
 char	*get_next_line(int fd)
@@ -117,6 +118,8 @@ char	*get_next_line(int fd)
 		data[fd][1] = ft_calloc(1, sizeof(size_t));
 	if (!data[fd][2])
 		data[fd][2] = ft_calloc(1, sizeof(size_t));
+	if (!data[fd][1] || !data[fd][2])
+		return (arg_free(&data[fd][0], &data[fd][1], &data[fd][2]));
 	read_bit = push(fd, (char **)&data[fd][0],
 			(size_t *)data[fd][1], (size_t *)data[fd][2]);
 	if (read_bit >= 0)
