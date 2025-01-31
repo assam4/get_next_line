@@ -6,7 +6,7 @@
 /*   By: saslanya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 01:49:36 by saslanya          #+#    #+#             */
-/*   Updated: 2025/01/31 15:17:50 by saslanya         ###   ########.fr       */
+/*   Updated: 2025/01/31 15:24:27 by saslanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ char	*get_next_line(int fd)
 	char			*outline;
 	int				read_bit;
 
+	outline = NULL;
 	if ((fd != 0 && fd < 2) || fd > FOPEN_MAX)
 		return (NULL);
 	if (!data[1])
@@ -124,7 +125,7 @@ char	*get_next_line(int fd)
 	if (read_bit >= 0)
 		outline = pop((char **)&data[0],
 				*(size_t *)data[1], (size_t *)data[2]);
-	if (read_bit < 0 || !*((size_t *)data[2]))
+	if (!outline || read_bit < 0 || !*((size_t *)data[2]))
 	{
 		arg_free(&data[0], &data[1], &data[2]);
 		if (read_bit < 0)
