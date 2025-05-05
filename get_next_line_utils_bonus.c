@@ -43,15 +43,13 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t n)
 char	*ft_strchr(const char *s, int c)
 {
 	size_t	s_len;
-	char	letter;
 
-	letter = (char)c;
 	if (!s)
 		return (NULL);
 	s_len = ft_strlen(s) + 1;
 	while (s_len--)
 	{
-		if (*s == letter)
+		if (*(unsigned char)s == (unsigned char)c)
 			return ((char *)s);
 		++s;
 	}
